@@ -17,6 +17,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  String? _city;
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +26,18 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Weather'),
         actions: [
-          IconButton(onPressed: () async {
-            await Navigator.push(context, MaterialPageRoute(builder: (context){
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () async {
+            _city = await Navigator.push(context, MaterialPageRoute(builder: (context){
               return SearchPage();
             }));
-          }, icon: Icon(Icons.search))
+            print("city: $_city");
+            if (_city != null){
+              context.read<WeatherProvider>().fetchWeather(_city!);
+            }
+          },
+          )
         ],
       ),
       body: Center(
