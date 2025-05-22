@@ -8,6 +8,7 @@ import 'package:open_weather_provider/repositories/weather_repository.dart';
 part 'weather_state.dart';
 
 class WeatherProvider with ChangeNotifier {
+
   WeatherState _state = WeatherState.initial();
   WeatherState get state => _state;
 
@@ -17,6 +18,7 @@ class WeatherProvider with ChangeNotifier {
   });
 
   Future<void> fetchWeather(String city) async{
+
     _state = _state.copyWith(status: WeatherStatus.loading);
     notifyListeners();
 
