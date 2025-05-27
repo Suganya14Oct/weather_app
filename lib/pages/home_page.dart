@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_weather_provider/constants/constants.dart';
 import 'package:open_weather_provider/pages/search_page.dart';
+import 'package:open_weather_provider/pages/settings_page.dart';
 import 'package:open_weather_provider/provider/weather/weather_provider.dart';
 import 'package:open_weather_provider/repositories/weather_repository.dart';
 import 'package:open_weather_provider/services/weather_api_services.dart';
@@ -35,7 +36,6 @@ class _HomePageState extends State<HomePage> {
     _weatherProv.removeListener(_registerListener);
     super.dispose();
   }
-
 
 
   void _registerListener (){
@@ -113,8 +113,7 @@ class _HomePageState extends State<HomePage> {
             const Spacer(),
             state.weather.icon.isNotEmpty ? showIcon(state.weather.icon) : Center(child: CircularProgressIndicator()),
             Expanded(flex: 3, child: formatText(state.weather.description)),
-            const Spacer(
-            )
+            const Spacer()
           ],
         )
       ],
@@ -153,6 +152,14 @@ class _HomePageState extends State<HomePage> {
               context.read<WeatherProvider>().fetchWeather(_city!);
             }
           },
+          ),
+          IconButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return SettingsPage();
+                }));
+              },
+              icon: const Icon(Icons.settings)
           )
         ],
       ),
