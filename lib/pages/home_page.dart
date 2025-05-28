@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:open_weather_provider/constants/constants.dart';
 import 'package:open_weather_provider/pages/search_page.dart';
 import 'package:open_weather_provider/pages/settings_page.dart';
+import 'package:open_weather_provider/provider/providers.dart';
 import 'package:open_weather_provider/provider/weather/weather_provider.dart';
 import 'package:open_weather_provider/repositories/weather_repository.dart';
 import 'package:open_weather_provider/services/weather_api_services.dart';
@@ -47,6 +48,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   String showTemperature(double temperature) {
+    final tempUnit = context.watch<TempSettingProvider>().state.tempUnit;
+
+    if (tempUnit == TempUnit.fahrenheit){
+      return ((temperature * 9 / 5) + 32).toStringAsFixed(2) + '℉';
+    }
+
     return temperature.toStringAsFixed(2) + '°C';
   }
 

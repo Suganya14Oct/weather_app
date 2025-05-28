@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:open_weather_provider/pages/home_page.dart';
+import 'package:open_weather_provider/provider/providers.dart';
+import 'package:open_weather_provider/provider/temp_settings/temp_settings_provider.dart';
 import 'package:open_weather_provider/provider/weather/weather_provider.dart';
 import 'package:open_weather_provider/repositories/weather_repository.dart';
 import 'package:open_weather_provider/services/weather_api_services.dart';
@@ -27,15 +29,21 @@ class MyApp extends StatelessWidget {
             WeatherRepository(weatherApiServices: WeatherApiServices(httpClient: http.Client()))),
         ChangeNotifierProvider<WeatherProvider>(create: (context) => WeatherProvider(
             weatherRepository: context.read<WeatherRepository>(),
-        ))
+        )),
+        ChangeNotifierProvider<TempSettingProvider>(create: (context) => TempSettingProvider()),
+        ChangeNotifierProxyProvider<WeatherProvider, ThemeProvider>(
+            create: (context) => ThemeProvider(),
+            update: (
+                BuildContext context,
+                WeatherProvider weatherProvider,
+                ThemeProvider? themeProvider
+                ) =>
+        themeProvider!..update(weatherProvider))
       ],
-      child: MaterialApp(
+      builder: (context, _) =>  MaterialApp(
         title: 'Weather App',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        theme: context.watch<ThemeProvider>().state.appTheme == AppTheme.light ? ThemeData.light() : ThemeData.dark(),
         home: HomePage(),
       )
     );
